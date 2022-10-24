@@ -5,6 +5,7 @@
   --capture-move-color: #ff8a65;
   --incheck-color: #fc5c65;
   --origin-color: #b0bec5;
+  --castling-color: #74b377;
 }
 
 g-board {
@@ -119,4 +120,8 @@ g-piece {
   width: 100%;
   height: 100%;
   background-color: var(--origin-color);
+}
+
+.castling::before {
+  background-color: var(--castling-color) !important;
 }

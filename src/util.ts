@@ -39,3 +39,11 @@ export function findKingLocation(side: PieceColor): Position | null {
     }
   return null;
 }
+
+export function getMoveIndex(newLocation: Position, moves: ValidMove[]): number {
+  for (let i = 0; i < moves.length; i++) {
+    const move = moves[i];
+    if (move.location.file == newLocation.file && move.location.rank == newLocation.rank) return i;
+  }
+  return -1;
+}

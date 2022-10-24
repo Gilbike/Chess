@@ -1,7 +1,7 @@
 import { HightlightType, PieceColor, PieceType } from "./constants";
 import Field from "./Field";
 import Rules from "./rules";
-import { isMoveInValids, makeElement } from "./util";
+import { getMoveIndex, isMoveInValids, makeElement } from "./util";
 
 export default class Piece {
   private _board: HTMLElement;
@@ -74,7 +74,7 @@ export default class Piece {
     this._moving = true;
     this._dom.style.cursor = "grabbing";
     this._dom.style.zIndex = "10";
-    this._possibleMoves = Rules.GetValidMovesForPiece(this);
+    this._possibleMoves = Rules.GetValidMovesForPiece(this, true);
     Field.GetField(this.location)?.SetHightlight(HightlightType.Origin);
     Field.MassHighlightField(this._possibleMoves);
   }
@@ -94,15 +94,25 @@ export default class Piece {
     Field.GetField(this.location)?.SetHightlight(HightlightType.None);
 
     if (isMoveInValids(newLocation, this._possibleMoves)) {
-      this.Activate(); // make the piece active (needed for pawn double step in first round)
-      Field.GetField(this.location)?.SetPiece(null); // remove from old field
-      this._location = newLocation;
-
-      if (!Field.GetField(this._location)?.IsFieldEmpty()) Field.GetField(this._location)?.GetPiece()?.GetCaptured(); // remove captured piece
-
-      Field.GetField(this._location)?.SetPiece(this); // set new field
-
-      new Audio("./move.mp3").play(); // play move audio
+      this.MovePiece(newLocation);
+      // castling
+      if (this.type == PieceType.KING && this._possibleMoves[getMoveIndex(newLocation, this._possibleMoves)].moveType == HightlightType.Castling && this._location.file == (this.color == PieceColor.WHITE ? 1 : 8)) {
+        const row = this.color == PieceColor.WHITE ? 1 : 8;
+        const kingSide = this._location.rank == 7;
+        if (kingSide) {
+          Field.GetField({ file: row, rank: 8 })?.GetPiece()?.MovePiece({ file: row, rank: 6 });
+        } else {
+          Field.GetField({ file: row, rank: 1 })?.GetPiece()?.MovePiece({ file: row, rank: 4 });
+        }
+      }
+      // pawn promotion
+      else if (this.type == PieceType.PAWN) {
+        const row = this.color == PieceColor.WHITE ? 8 : 1;
+        if (this.location.file == row) {
+          this._type = PieceType.QUEEN;
+          this._dom.className = this._dom.className.replace("p", "q");
+        }
+      }
 
       Rules.NextTurn();
     }
@@ -119,5 +129,18 @@ export default class Piece {
     const xOffset = e.x - this._dom.offsetWidth / 2 - boardLocation.left,
       yOffset = e.y - this._dom.offsetWidth / 2 - boardLocation.top;
     this._dom.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+  }
+
+  MovePiece(location: Position) {
+    this.Activate(); // make the piece active (needed for pawn double step in first round)
+    Field.GetField(this.location)?.SetPiece(null); // remove from old field
+    this._location = location;
+
+    if (!Field.GetField(this._location)?.IsFieldEmpty()) Field.GetField(this._location)?.GetPiece()?.GetCaptured(); // remove captured piece
+
+    Field.GetField(this._location)?.SetPiece(this); // set new field
+
+    new Audio("./move.mp3").play(); // play move audio
+    this.UpdatePiecePosition(); // update dom position
   }
 }

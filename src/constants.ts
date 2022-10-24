@@ -20,6 +20,7 @@ export enum HightlightType {
   Capture,
   Check,
   Origin,
+  Castling,
 }
 
 export const defaultFen: string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";

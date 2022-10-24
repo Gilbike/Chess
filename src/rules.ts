@@ -1,4 +1,4 @@
-import { HightlightType, PieceColor, PIECE_BEHAVIOUR } from "./constants";
+import { HightlightType, PieceColor, PieceType, PIECE_BEHAVIOUR } from "./constants";
 import Field from "./Field";
 import Piece from "./Piece";
 import { findKingLocation, getOppositeSide, getSidePieces, isMoveInValids } from "./util";
@@ -71,8 +71,6 @@ export default class Rules {
         const newLocation = { file: (piece.location.file as number) + (fileDirection as number), rank: (piece.location.rank as number) + (rankDirection as number) };
 
         if (!Field.GetField(newLocation)?.IsFieldEmpty() && Field.GetField(newLocation)?.GetPiece()?.color != piece.color && newLocation.file <= 8 && newLocation.file >= 1 && newLocation.rank <= 8 && newLocation.rank >= 1) {
-          console.log(newLocation);
-
           if (checkForCheck) {
             // cant step inside check
             if (!this.IsMoveValid(piece, newLocation)) break;
@@ -84,6 +82,26 @@ export default class Rules {
           };
           valids.push(move);
         }
+      }
+    }
+    if (piece.type == PieceType.KING && checkForCheck) {
+      // castling
+      const row = piece.color == PieceColor.WHITE ? 1 : 8;
+      const kingSideAvaible = !Field.GetField({ file: row, rank: 8 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 8 })?.GetPiece()?.color == piece.color && Field.GetField({ file: row, rank: 8 })?.GetPiece()?.type == PieceType.ROOK && !Field.GetField({ file: row, rank: 8 })?.GetPiece()?.active && Field.GetField({ file: row, rank: 7 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 6 })?.IsFieldEmpty() && isMoveInValids({ file: row, rank: 6 }, valids);
+      const queenSideAvaible = !Field.GetField({ file: row, rank: 1 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 1 })?.GetPiece()?.color == piece.color && Field.GetField({ file: row, rank: 1 })?.GetPiece()?.type == PieceType.ROOK && !Field.GetField({ file: row, rank: 1 })?.GetPiece()?.active && Field.GetField({ file: row, rank: 2 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 3 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 4 })?.IsFieldEmpty() && isMoveInValids({ file: row, rank: 4 }, valids);
+      if (kingSideAvaible) {
+        const move: ValidMove = {
+          location: { file: row, rank: 7 },
+          moveType: HightlightType.Castling,
+        };
+        valids.push(move);
+      }
+      if (queenSideAvaible) {
+        const move: ValidMove = {
+          location: { file: row, rank: 3 },
+          moveType: HightlightType.Castling,
+        };
+        valids.push(move);
       }
     }
 

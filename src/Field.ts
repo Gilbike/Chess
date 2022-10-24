@@ -39,8 +39,11 @@ export default class Field {
       case HightlightType.Origin:
         this.dom.className = "highlighted origin";
         break;
+      case HightlightType.Castling:
+        this.dom.className = "highlighted possible castling";
+        break;
       default:
-        this.dom.className = "";
+        this.dom.removeAttribute("class");
         break;
     }
   }
