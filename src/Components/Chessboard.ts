@@ -28,5 +28,9 @@ export default class Chessboard {
     }
 
     Rules.SetTurningSide(GetConfig().startingSide!);
+
+    window.onresize = () => {
+      for (let f = BOARD_SIZE; f > 0; f--) for (let r = 1; r <= BOARD_SIZE; r++) Field.GetField({ file: f, rank: r })?.GetPiece()?.UpdatePiecePosition();
+    };
   }
 }

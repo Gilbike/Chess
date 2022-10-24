@@ -57,12 +57,12 @@ export default class Field {
   }
   static MassHighlightField(fields: ValidMove[]): void {
     for (let move of fields) {
-      Field.GetField(move.location)?.SetHightlight(move.moveType);
+      this.GetField(move.location)?.SetHightlight(move.moveType);
     }
   }
   static MassRemoveHighlights(fields: ValidMove[]): void {
     for (let move of fields) {
-      Field.GetField(move.location)?.SetHightlight(HightlightType.None);
+      this.GetField(move.location)?.SetHightlight(HightlightType.None);
     }
   }
   static DestroyFields() {

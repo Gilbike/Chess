@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;800&display=swap");
 
 :root {
   --dark-tile-color: #a1887f;
@@ -14,9 +14,12 @@ body {
   font-family: "Montserrat", sans-serif;
   background-color: #121212;
   color: white;
+  margin: 0;
+  padding: 0;
 }
 
 .g-game {
+  margin-top: 40px !important;
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -142,6 +145,7 @@ g-piece {
 
 /**/
 .g-gamebar {
+  max-width: 150px;
   box-sizing: border-box;
   height: 100%;
   width: fit-content;
@@ -153,24 +157,39 @@ g-piece {
   gap: 10px;
 }
 
-.g-gamebar > div {
+.g-gamebar-sidecontainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.g-gamebar-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   position: relative;
-  height: calc(50% - 5px);
   background-color: #404040;
   border-radius: 5px;
   padding: 5px;
   text-align: center;
+  align-items: center;
 }
 
-.g-gamebar > div > * {
+.g-gamebar-side > * {
   z-index: 2;
   position: relative;
 }
 
 .g-gamebar img {
-  width: auto;
-  height: calc(66% / 5);
+  width: 40px;
+  height: 40px;
+}
+
+.g-gamebar-name {
+  text-align: center;
+  font-weight: 200;
 }
 
 .g-active-side::before {
@@ -261,4 +280,43 @@ a:visited {
   text-decoration: none;
   color: var(--castling-color);
   border-bottom: 1px dashed var(--castling-color);
+}
+
+@media only screen and (max-width: 1000px) {
+  .g-board-container {
+    width: 90vw !important;
+    height: 90vw !important;
+    aspect-ratio: 1 / 1;
+  }
+  .g-game {
+    margin-top: 20px !important;
+    flex-direction: column;
+    height: fit-content !important;
+  }
+  .g-gamebar {
+    width: 100%;
+    max-width: 100%;
+    flex-direction: row;
+  }
+  .g-gamebar-sidecontainer:last-child {
+    flex-direction: column-reverse;
+  }
+  .g-gamebar-side {
+    flex-direction: row;
+    align-items: center;
+  }
+  .g-gamebar img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .g-gamebar-side {
+    flex-direction: column;
+    align-items: center;
+  }
+  .button {
+    width: calc(100% - 50px);
+  }
 }

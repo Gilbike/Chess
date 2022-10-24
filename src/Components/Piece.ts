@@ -23,6 +23,7 @@ export default class Piece {
 
     this.UpdatePiecePosition();
 
+    // desktop
     this._dom.onmousedown = (e) => {
       this.StartDrag(e);
     };
@@ -63,7 +64,7 @@ export default class Piece {
   }
   //#endregion
 
-  private UpdatePiecePosition() {
+  UpdatePiecePosition() {
     const xOffset = (this._location.rank.valueOf() - 1) * (this._board.offsetWidth / 8),
       yOffset = (8 - this._location.file.valueOf()) * (this._board.offsetHeight / 8);
     this._dom.style.transform = `translate(${xOffset}px, ${yOffset}px)`;

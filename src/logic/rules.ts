@@ -11,12 +11,12 @@ export default class Rules {
   static BlackKing: Piece;
 
   static SetTurningSide(side: PieceColor): void {
-    Rules._whosTurn = side;
+    this._whosTurn = side;
   }
   static NextTurn(): void {
-    Rules._whosTurn = getOppositeSide(this._whosTurn);
+    this._whosTurn = getOppositeSide(this._whosTurn);
     let possibleMoves = 0;
-    for (let piece of getSidePieces(Rules._whosTurn)) {
+    for (let piece of getSidePieces(this._whosTurn)) {
       possibleMoves += this.GetValidMovesForPiece(piece, true, false).length;
     }
     if (possibleMoves == 0) {
@@ -35,7 +35,7 @@ export default class Rules {
   static GetValidMovesForPiece(piece: Piece, checkForCheck: boolean = true, allowSameColor?: boolean): ValidMove[] {
     const valids: ValidMove[] = [];
 
-    if (!allowSameColor) if (Field.GetField(piece.location)?.IsFieldEmpty() || piece.color != Rules._whosTurn) return [];
+    if (!allowSameColor) if (Field.GetField(piece.location)?.IsFieldEmpty() || piece.color != this._whosTurn) return [];
 
     const PieceData: PieceBehaiourData = PIECE_BEHAVIOUR[piece.type];
     const PieceDirections: Position[] = PieceData.moveDirections;
