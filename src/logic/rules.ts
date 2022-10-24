@@ -2,6 +2,8 @@ import { HightlightType, PieceColor, PieceType, PIECE_BEHAVIOUR } from "./consta
 import Field from "../Components/Field";
 import Piece from "../Components/Piece";
 import { findKingLocation, getOppositeSide, getSidePieces, isMoveInValids } from "./util";
+import Gamebar from "../Components/Gamebar";
+import EndModal from "../Components/EndModal";
 
 export default class Rules {
   private static _whosTurn: PieceColor;
@@ -18,12 +20,16 @@ export default class Rules {
       possibleMoves += this.GetValidMovesForPiece(piece, true, false).length;
     }
     if (possibleMoves == 0) {
+      let modal: EndModal;
       if (this.IsInCheck(this._whosTurn)) {
-        console.log("checkmate");
+        modal = new EndModal(this._whosTurn, false);
       } else {
-        console.log("stalemate");
+        modal = new EndModal(this._whosTurn, true);
       }
+      modal.ShowModal();
+      modal.Bind();
     }
+    Gamebar.SetActiveSide(this._whosTurn);
   }
 
   static GetValidMovesForPiece(piece: Piece, checkForCheck: boolean = true, allowSameColor?: boolean): ValidMove[] {
@@ -109,13 +115,13 @@ export default class Rules {
   }
 
   private static IsMoveValid(piece: Piece, newLocation: Position): boolean {
-    const oppositePieces = getSidePieces(getOppositeSide(piece.color));
-
     const oldPiece = Field.GetField(newLocation)!.GetPiece();
 
     let result = true;
     Field.GetField(piece.location)?.SetPiece(null);
     Field.GetField(newLocation)?.SetPiece(piece);
+
+    const oppositePieces = getSidePieces(getOppositeSide(piece.color));
 
     for (let oPiece of oppositePieces) {
       const moves = this.GetValidMovesForPiece(oPiece, false, true);

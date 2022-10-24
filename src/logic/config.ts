@@ -13,7 +13,7 @@ let GameConfig: ChessGameConfig = defaultConfig;
 
 export function SetConfig(config?: ChessGameConfig) {
   const loadedConfig = config == undefined ? {} : config;
-  console.log({ ...GameConfig, ...loadedConfig });
+  GameConfig = { ...GameConfig, ...loadedConfig };
 }
 
 export function GetConfig(): ChessGameConfig {

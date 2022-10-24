@@ -1,7 +1,8 @@
 import { HightlightType, PieceColor, PieceType } from "../logic/constants";
 import Field from "./Field";
 import Rules from "../logic/rules";
-import { getMoveIndex, isMoveInValids, makeElement } from "../logic/util";
+import { getMoveIndex, getOppositeSide, isMoveInValids, makeElement } from "../logic/util";
+import Gamebar from "./Gamebar";
 
 export default class Piece {
   private _board: HTMLElement;
@@ -136,7 +137,10 @@ export default class Piece {
     Field.GetField(this.location)?.SetPiece(null); // remove from old field
     this._location = location;
 
-    if (!Field.GetField(this._location)?.IsFieldEmpty()) Field.GetField(this._location)?.GetPiece()?.GetCaptured(); // remove captured piece
+    if (!Field.GetField(this._location)?.IsFieldEmpty()) {
+      Gamebar.AddKnockedPiece(getOppositeSide(this._color), Field.GetField(this._location)!.GetPiece()!.type);
+      Field.GetField(this._location)?.GetPiece()?.GetCaptured(); // remove captured piece
+    }
 
     Field.GetField(this._location)?.SetPiece(this); // set new field
 

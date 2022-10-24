@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap");
+
 :root {
   --dark-tile-color: #a1887f;
   --light-tile-color: #e0e0e0;
@@ -5,7 +7,19 @@
   --capture-move-color: #ff8a65;
   --incheck-color: #fc5c65;
   --origin-color: #b0bec5;
-  --castling-color: #74b377;
+  --castling-color: #62a065;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background-color: #121212;
+  color: white;
+}
+
+.g-game {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 g-board {
@@ -124,4 +138,127 @@ g-piece {
 
 .castling::before {
   background-color: var(--castling-color) !important;
+}
+
+/**/
+.g-gamebar {
+  box-sizing: border-box;
+  height: 100%;
+  width: fit-content;
+  background-color: #303030;
+  padding: 5px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.g-gamebar > div {
+  box-sizing: border-box;
+  position: relative;
+  height: calc(50% - 5px);
+  background-color: #404040;
+  border-radius: 5px;
+  padding: 5px;
+  text-align: center;
+}
+
+.g-gamebar > div > * {
+  z-index: 2;
+  position: relative;
+}
+
+.g-gamebar img {
+  width: auto;
+  height: calc(66% / 5);
+}
+
+.g-active-side::before {
+  width: 100%;
+  height: 100%;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 5px;
+  opacity: 0.5;
+  background-color: var(--possible-move-color) !important;
+}
+
+/**/
+.g-modal-background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #121212;
+  opacity: 0.6;
+  z-index: 98;
+}
+
+.g-modal {
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #303030;
+  z-index: 99;
+  border-radius: 10px;
+  padding: 10px;
+  animation: g-modal-in 0.4s ease forwards;
+}
+
+.g-modal-title {
+  font-weight: 800;
+  font-size: 1.7em;
+  margin-bottom: 10px;
+  margin-left: 50px;
+  margin-right: 50px;
+  text-align: center;
+}
+
+.button {
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #81c784;
+  width: 250px;
+  color: #121212;
+  text-align: center;
+  margin: auto;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.button:hover {
+  background-color: #66bb6a;
+}
+
+@keyframes g-modal-in {
+  from {
+    top: 45%;
+    opacity: 0;
+  }
+  to {
+    top: 50%;
+    opacity: 1;
+  }
+}
+
+.g-newgame-setting {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+a,
+a:visited {
+  text-decoration: none;
+  color: var(--castling-color);
+  border-bottom: 1px dashed var(--castling-color);
 }

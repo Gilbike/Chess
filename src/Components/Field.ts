@@ -65,4 +65,7 @@ export default class Field {
       Field.GetField(move.location)?.SetHightlight(HightlightType.None);
     }
   }
+  static DestroyFields() {
+    this.fields = [];
+  }
 }

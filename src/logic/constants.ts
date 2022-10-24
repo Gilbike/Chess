@@ -1,5 +1,4 @@
 export const BOARD_SIZE = 8;
-
 export enum PieceType {
   PAWN = "p",
   KNIGHT = "n",
@@ -8,12 +7,10 @@ export enum PieceType {
   QUEEN = "q",
   KING = "k",
 }
-
 export enum PieceColor {
   WHITE = "w",
   BLACK = "b",
 }
-
 export enum HightlightType {
   None,
   PossibleMove,
@@ -22,9 +19,6 @@ export enum HightlightType {
   Origin,
   Castling,
 }
-
-export const defaultFen: string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
-
 export const PIECE_BEHAVIOUR: {
   [key in PieceType]: PieceBehaiourData;
 } = {
