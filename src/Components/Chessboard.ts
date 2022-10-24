@@ -1,16 +1,16 @@
-import { makeElement } from "./util";
-import "./chessboard.css";
-import { BOARD_SIZE, defaultFen, PieceColor, PieceType } from "./constants";
+import { makeElement } from "../logic/util";
+import "../chessboard.css";
+import { BOARD_SIZE, defaultFen, PieceColor, PieceType } from "../logic/constants";
 import Field from "./Field";
 import Piece from "./Piece";
-import Notation from "./Notation";
-import Rules from "./rules";
+import Notation from "../logic/notation";
+import Rules from "../logic/rules";
 
 export default class Chessboard {
   private boardElement: HTMLElement;
   private gridElement: HTMLElement;
 
-  constructor(element: HTMLElement, config?: ChessConfig) {
+  constructor(element: HTMLElement, config?: ChessGameConfig) {
     this.boardElement = makeElement("g-board");
     this.gridElement = makeElement("g-fields");
     this.boardElement.append(this.gridElement);

@@ -1,6 +1,10 @@
-interface ChessConfig {
+interface ChessGameConfig {
   startingFen?: string;
   startingSide?: PieceColor;
+  lightPlayerName?: string;
+  darkPlayerName?: string;
+  lightTileColor?: string;
+  darkTileColor?: string;
 }
 
 interface Position {

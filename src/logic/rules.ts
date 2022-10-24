@@ -1,6 +1,6 @@
 import { HightlightType, PieceColor, PieceType, PIECE_BEHAVIOUR } from "./constants";
-import Field from "./Field";
-import Piece from "./Piece";
+import Field from "../Components/Field";
+import Piece from "../Components/Piece";
 import { findKingLocation, getOppositeSide, getSidePieces, isMoveInValids } from "./util";
 
 export default class Rules {

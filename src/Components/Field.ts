@@ -1,6 +1,6 @@
-import { HightlightType } from "./constants";
+import { HightlightType } from "../logic/constants";
 import Piece from "./Piece";
-import { makeElement } from "./util";
+import { makeElement } from "../logic/util";
 
 export default class Field {
   private dom: HTMLElement;

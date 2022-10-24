@@ -1,7 +1,7 @@
-import { HightlightType, PieceColor, PieceType } from "./constants";
+import { HightlightType, PieceColor, PieceType } from "../logic/constants";
 import Field from "./Field";
-import Rules from "./rules";
-import { getMoveIndex, isMoveInValids, makeElement } from "./util";
+import Rules from "../logic/rules";
+import { getMoveIndex, isMoveInValids, makeElement } from "../logic/util";
 
 export default class Piece {
   private _board: HTMLElement;
@@ -140,7 +140,7 @@ export default class Piece {
 
     Field.GetField(this._location)?.SetPiece(this); // set new field
 
-    new Audio("./move.mp3").play(); // play move audio
+    new Audio("assets/move.mp3").play(); // play move audio
     this.UpdatePiecePosition(); // update dom position
   }
 }

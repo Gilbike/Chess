@@ -1,6 +1,6 @@
 import { BOARD_SIZE, PieceColor, PieceType } from "./constants";
-import Field from "./Field";
-import Piece from "./Piece";
+import Field from "../Components/Field";
+import Piece from "../Components/Piece";
 
 export function makeElement(name: string, classname?: string): HTMLElement {
   const element = document.createElement(name);
