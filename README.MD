@@ -8,5 +8,5 @@
 
 # FEATUREK AMIK KELLENEk
 
-- [ ] Választható paraszt promóció
+- [x] Választható paraszt promóció
 - [ ] En Passant
