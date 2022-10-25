@@ -3,6 +3,7 @@ import Field from "./Field";
 import Rules from "../logic/rules";
 import { getMoveIndex, getOppositeSide, isMoveInValids, makeElement } from "../logic/util";
 import Gamebar from "./Gamebar";
+import PromotionModal from "./PromotionModal";
 
 export default class Piece {
   private _board: HTMLElement;
@@ -128,8 +129,12 @@ export default class Piece {
       else if (this.type == PieceType.PAWN) {
         const row = this.color == PieceColor.WHITE ? 8 : 1;
         if (this.location.file == row) {
-          this._type = PieceType.QUEEN;
-          this._dom.className = this._dom.className.replace("p", "q");
+          const modal = new PromotionModal();
+          modal.ShowModal();
+          modal.Bind((type: PieceType) => {
+            this._type = type;
+            this._dom.className = this._dom.className.replace("p", type);
+          });
         }
       }
 

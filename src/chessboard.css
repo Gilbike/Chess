@@ -239,6 +239,24 @@ g-piece {
   text-align: center;
 }
 
+.g-promotion-button {
+  box-sizing: border-box;
+  background-color: #404040;
+  border-radius: 5px;
+  width: 80px;
+  height: 80px;
+  padding: 5px;
+  cursor: pointer;
+  transition: border-width 0.2s ease;
+}
+.g-promotion-button img {
+  width: 100%;
+  height: 100%;
+}
+.g-promotion-button:hover {
+  border: var(--possible-move-color) 2px solid;
+}
+
 .button {
   padding: 10px;
   box-sizing: border-box;
