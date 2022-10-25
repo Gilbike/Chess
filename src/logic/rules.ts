@@ -143,7 +143,7 @@ export default class Rules {
     Field.GetField(newLocation)?.SetPiece(piece);
 
     // Check if the king would still be in danger after the move
-    this.IsInCheck(piece.color);
+    if (this.IsInCheck(piece.color)) result = false;
 
     // Undo the move
     Field.GetField(piece.location)?.SetPiece(piece);
