@@ -1,6 +1,6 @@
 import { HightlightType } from "../logic/constants";
 import Piece from "./Piece";
-import { makeElement } from "../logic/util";
+import { createElement } from "../logic/util";
 
 export default class Field {
   private dom: HTMLElement;
@@ -9,22 +9,26 @@ export default class Field {
   private highlight: HightlightType = HightlightType.None;
 
   constructor(board: HTMLElement, location: Position, isLight: boolean) {
-    this.dom = makeElement(isLight ? "g-light-tile" : "g-dark-tile");
+    this.dom = createElement(isLight ? "g-light-tile" : "g-dark-tile");
     this.location = location;
     board.append(this.dom);
     Field.fields.push(this);
   }
 
+  //#region PUBLIC_METHODS
   IsFieldEmpty(): boolean {
     return this.piece == null;
   }
+
   GetPiece(): Piece | null {
     return this.piece;
   }
-  SetPiece(piece: Piece | null) {
+
+  SetPiece(piece: Piece | null): void {
     this.piece = piece;
   }
-  SetHightlight(type: HightlightType) {
+
+  SetHightlight(type: HightlightType): void {
     this.highlight = type;
     switch (this.highlight) {
       case HightlightType.PossibleMove:
@@ -47,25 +51,31 @@ export default class Field {
         break;
     }
   }
+  //#endregion
 
-  private static fields: Field[] = [];
+  //#region STATIC_METHODS
+  private static fields: Field[] = []; // All of the fields
   static GetField(location: Position): Field | null {
     for (let field of Field.fields) {
       if (field.location.file == location.file && field.location.rank == location.rank) return field;
     }
     return null;
   }
+
   static MassHighlightField(fields: ValidMove[]): void {
     for (let move of fields) {
       this.GetField(move.location)?.SetHightlight(move.moveType);
     }
   }
+
   static MassRemoveHighlights(fields: ValidMove[]): void {
     for (let move of fields) {
       this.GetField(move.location)?.SetHightlight(HightlightType.None);
     }
   }
-  static DestroyFields() {
+
+  static DestroyFields(): void {
     this.fields = [];
   }
+  //#endregion
 }

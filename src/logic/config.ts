@@ -11,11 +11,25 @@ const defaultConfig: ChessGameConfig = {
 
 let GameConfig: ChessGameConfig = defaultConfig;
 
-export function SetConfig(config?: ChessGameConfig) {
+/**
+ * Sets current game configuration settings
+ * @param config The configuration
+ */
+export function SetConfig(config?: ChessGameConfig): void {
   const loadedConfig = config == undefined ? {} : config;
   GameConfig = { ...GameConfig, ...loadedConfig };
 }
 
+/**
+ * @returns The configuration object
+ */
 export function GetConfig(): ChessGameConfig {
   return GameConfig;
+}
+
+/**
+ * Resets everything to default
+ */
+export function ResetConfig(): void {
+  GameConfig = defaultConfig;
 }

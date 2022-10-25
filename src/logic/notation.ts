@@ -1,6 +1,10 @@
 import { PieceColor, PieceType } from "./constants";
 
 export default class Notation {
+  /**
+   * @param fen FEN string
+   * @returns The pieces that are fetched from the string
+   */
   static GetPiecesFromFEN(fen: string): ParsedFEN[] {
     const pieces: ParsedFEN[] = [];
 

@@ -1,5 +1,5 @@
-import { makeElement } from "../logic/util";
-import { BOARD_SIZE, PieceColor, PieceType } from "../logic/constants";
+import { createElement } from "../logic/util";
+import { BOARD_SIZE } from "../logic/constants";
 import Field from "./Field";
 import Piece from "./Piece";
 import Notation from "../logic/notation";
@@ -11,8 +11,8 @@ export default class Chessboard {
   private gridElement: HTMLElement;
 
   constructor(element: HTMLElement) {
-    this.boardElement = makeElement("g-board");
-    this.gridElement = makeElement("g-fields");
+    this.boardElement = createElement("g-board");
+    this.gridElement = createElement("g-fields");
     this.boardElement.append(this.gridElement);
     element.append(this.boardElement);
 
@@ -23,12 +23,11 @@ export default class Chessboard {
     for (let piece of Notation.GetPiecesFromFEN(GetConfig().startingFen!)) {
       let nPiece = new Piece(this.boardElement, { file: piece.location.file, rank: piece.location.rank }, piece.color, piece.type);
       Field.GetField({ file: piece.location.file, rank: piece.location.rank })?.SetPiece(nPiece);
-      if (piece.color == PieceColor.WHITE && piece.type == PieceType.KING) Rules.WhiteKing = nPiece;
-      else if (piece.color == PieceColor.BLACK && piece.type == PieceType.KING) Rules.BlackKing = nPiece;
     }
 
-    Rules.SetTurningSide(GetConfig().startingSide!);
+    Rules.WhosTurn = GetConfig().startingSide!;
 
+    // TODO: Fix resize bug
     window.onresize = () => {
       for (let f = BOARD_SIZE; f > 0; f--) for (let r = 1; r <= BOARD_SIZE; r++) Field.GetField({ file: f, rank: r })?.GetPiece()?.UpdatePiecePosition();
     };

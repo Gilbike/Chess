@@ -43,20 +43,31 @@ export default class Gamebar {
     element.append(container);
   }
 
-  static SetActiveSide(side: PieceColor) {
+  /**
+   * @param side The side we want to active
+   */
+  static SetActiveSide(side: PieceColor): void {
     const className = side == PieceColor.WHITE ? "g-gamebar-side g-gamebar-light" : "g-gamebar-side g-gamebar-dark";
     const oppositeClassName = side == PieceColor.WHITE ? "g-gamebar-side g-gamebar-dark" : "g-gamebar-side g-gamebar-light";
     document.getElementsByClassName(oppositeClassName)[0].className = `${oppositeClassName}`;
     document.getElementsByClassName(className)[0].className = `${className} g-active-side`;
   }
 
-  static AddKnockedPiece(side: PieceColor, type: PieceType) {
+  /**
+   * @param side The side we knocked the piece from
+   * @param type The type of the knocked piece
+   */
+  static AddKnockedPiece(side: PieceColor, type: PieceType): void {
     const oldText = document.getElementById(`g-out-${side}${type}`)?.innerText || "0x";
     const newKnocked = parseInt(oldText.replace("x", "")) + 1;
     document.getElementById(`g-out-${side}${type}`)!.innerText = `${newKnocked}x`;
   }
 
-  static SetPlayerName(side: PieceColor, name: string) {
+  /**
+   * @param side The side of the player
+   * @param name The name of the player
+   */
+  static SetPlayerName(side: PieceColor, name: string): void {
     const elementID = side == PieceColor.WHITE ? "g-lightname" : "g-darkname";
     document.getElementById(elementID)!.innerText = name;
   }

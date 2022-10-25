@@ -19,11 +19,11 @@ export default class EndModal extends Modal {
     `;
   }
 
-  Bind() {
+  Bind(): void {
     document.getElementById("g-end-button")!.onclick = this.OnNewGameClick;
   }
 
-  OnNewGameClick() {
+  OnNewGameClick(): void {
     super.DestroyModal();
     const modal = new NewGameModal();
     modal.ShowModal();

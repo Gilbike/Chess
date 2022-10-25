@@ -39,11 +39,11 @@ export default class NewGameModal extends Modal {
     `;
   }
 
-  Bind() {
+  Bind(): void {
     document.getElementById("g-start-newgame")!.onclick = this.StartGame;
   }
 
-  StartGame() {
+  StartGame(): void {
     const fenValue = (document.getElementById("g-newgame-fen") as HTMLInputElement).value;
     const sideSelected = (document.getElementById("g-newgame-side") as HTMLSelectElement).selectedIndex;
     const p1Name = (document.getElementById("g-newgame-lightname") as HTMLInputElement).value;
@@ -60,7 +60,7 @@ export default class NewGameModal extends Modal {
     if (lightColor.length > 0) config.lightTileColor = lightColor;
     if (darkColor.length > 0) config.darkTileColor = darkColor;
 
-    document.getElementsByClassName("g-game")[0].innerHTML = ""; // delete old game
+    document.getElementsByClassName("g-game")[0].innerHTML = ""; // Delete old game
     new Chess(document.getElementsByClassName("g-game")[0] as HTMLElement, config);
     super.DestroyModal();
   }

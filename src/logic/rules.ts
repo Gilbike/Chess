@@ -1,65 +1,79 @@
+import { findKingLocation, getOppositeSide, getSidePieces, isMoveInValids } from "./util";
 import { HightlightType, PieceColor, PieceType, PIECE_BEHAVIOUR } from "./constants";
+import EndModal from "../Components/EndModal";
+import Gamebar from "../Components/Gamebar";
 import Field from "../Components/Field";
 import Piece from "../Components/Piece";
-import { findKingLocation, getOppositeSide, getSidePieces, isMoveInValids } from "./util";
-import Gamebar from "../Components/Gamebar";
-import EndModal from "../Components/EndModal";
 
 export default class Rules {
-  private static _whosTurn: PieceColor;
-  static WhiteKing: Piece;
-  static BlackKing: Piece;
+  static WhosTurn: PieceColor;
 
-  static SetTurningSide(side: PieceColor): void {
-    this._whosTurn = side;
-  }
   static NextTurn(): void {
-    this._whosTurn = getOppositeSide(this._whosTurn);
+    this.WhosTurn = getOppositeSide(this.WhosTurn); // Switch the turning side
+
+    // Count all moves that can be played
     let possibleMoves = 0;
-    for (let piece of getSidePieces(this._whosTurn)) {
+    for (let piece of getSidePieces(this.WhosTurn)) {
       possibleMoves += this.GetValidMovesForPiece(piece, true, false).length;
     }
     if (possibleMoves == 0) {
       let modal: EndModal;
-      if (this.IsInCheck(this._whosTurn)) {
-        modal = new EndModal(this._whosTurn, false);
+      if (this.IsInCheck(this.WhosTurn)) {
+        // King is in check CHECKMATE
+        modal = new EndModal(this.WhosTurn, false);
       } else {
-        modal = new EndModal(this._whosTurn, true);
+        // King is not in check STALEMATE
+        modal = new EndModal(this.WhosTurn, true);
       }
       modal.ShowModal();
       modal.Bind();
+      return;
     }
-    Gamebar.SetActiveSide(this._whosTurn);
+
+    Gamebar.SetActiveSide(this.WhosTurn); // Switch the active side displaying
   }
 
+  /**
+   * Calculates all possible and legal moves for a piece
+   * @param piece The piece that wants to move
+   * @param checkForCheck Wheter the function should validate if the move puts the king into check
+   * @param allowSameColor Allow a piece that is currently not on the turning side to move
+   * @returns All the valid and legal moves
+   */
   static GetValidMovesForPiece(piece: Piece, checkForCheck: boolean = true, allowSameColor?: boolean): ValidMove[] {
     const valids: ValidMove[] = [];
 
-    if (!allowSameColor) if (Field.GetField(piece.location)?.IsFieldEmpty() || piece.color != this._whosTurn) return [];
+    // Return empty if the its not the piece's turn
+    if (piece.color != this.WhosTurn && !allowSameColor) return [];
 
+    // Get the movement and attack behaiour of the piece
     const PieceData: PieceBehaiourData = PIECE_BEHAVIOUR[piece.type];
     const PieceDirections: Position[] = PieceData.moveDirections;
-    const PieceMaxMove = piece.active ? PieceData.maxMove : PieceData.firstMoveMax == undefined ? PieceData.maxMove : PieceData.firstMoveMax;
+    const PieceMaxMove = piece.active ? PieceData.maxMove : PieceData.firstMoveMax == undefined ? PieceData.maxMove : PieceData.firstMoveMax; // If the piece is not yet active it can have a different max move amount (pawn)
 
+    // Normal movement and attack
     for (let direction of PieceDirections) {
-      const fileDirection = piece.color == PieceColor.BLACK ? -direction.file : direction.file;
+      const fileDirection = piece.color == PieceColor.BLACK ? -direction.file : direction.file; // Reverse the direction if the piece is black
       const rankDirection = direction.rank;
 
       let breakOnNextField = false;
+      // Loop to max move distance
       for (let offset = 1; offset <= PieceMaxMove; offset++) {
+        // New proposed location
         const newLocation = { file: (piece.location.file as number) + offset * (fileDirection as number), rank: (piece.location.rank as number) + offset * (rankDirection as number) };
         let newMoveType = HightlightType.PossibleMove;
 
         if (breakOnNextField || newLocation.file > 8 || newLocation.rank > 8 || newLocation.file < 1 || newLocation.rank < 1) break;
         if (!Field.GetField(newLocation)?.IsFieldEmpty()) {
-          if (Field.GetField(newLocation)?.GetPiece()?.color == piece.color) break;
+          if (Field.GetField(newLocation)?.GetPiece()?.color == piece.color) break; // The piece is blocked by a friendly piece
+          // Can attack an enemy piece and does not have any special attack moves (pawn)
           if (Field.GetField(newLocation)?.GetPiece()?.color != piece.color && PieceData.specialAttack == undefined) {
             breakOnNextField = true;
             newMoveType = HightlightType.Capture;
           } else break;
         }
         if (checkForCheck) {
-          // cant step inside check
+          // If this move puts the king in check or does not solve a check then don't add it
           if (!this.IsMoveValid(piece, newLocation)) break;
         }
 
@@ -70,15 +84,16 @@ export default class Rules {
         valids.push(move);
       }
     }
+    // Special attack directions (pawn)
     if (PieceData.specialAttack != undefined) {
       for (let attack of PieceData.specialAttack) {
-        const fileDirection = piece.color == PieceColor.BLACK ? -attack.file : attack.file;
+        const fileDirection = piece.color == PieceColor.BLACK ? -attack.file : attack.file; // Reverse the direction if the piece is black
         const rankDirection = attack.rank;
         const newLocation = { file: (piece.location.file as number) + (fileDirection as number), rank: (piece.location.rank as number) + (rankDirection as number) };
 
         if (!Field.GetField(newLocation)?.IsFieldEmpty() && Field.GetField(newLocation)?.GetPiece()?.color != piece.color && newLocation.file <= 8 && newLocation.file >= 1 && newLocation.rank <= 8 && newLocation.rank >= 1) {
           if (checkForCheck) {
-            // cant step inside check
+            // If this move puts the king in check or does not solve a check then don't add it
             if (!this.IsMoveValid(piece, newLocation)) break;
           }
 
@@ -90,8 +105,8 @@ export default class Rules {
         }
       }
     }
+    // Special moves for the king (castling)
     if (piece.type == PieceType.KING && checkForCheck) {
-      // castling
       const row = piece.color == PieceColor.WHITE ? 1 : 8;
       const kingSideAvaible = !Field.GetField({ file: row, rank: 8 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 8 })?.GetPiece()?.color == piece.color && Field.GetField({ file: row, rank: 8 })?.GetPiece()?.type == PieceType.ROOK && !Field.GetField({ file: row, rank: 8 })?.GetPiece()?.active && Field.GetField({ file: row, rank: 7 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 6 })?.IsFieldEmpty() && isMoveInValids({ file: row, rank: 6 }, valids);
       const queenSideAvaible = !Field.GetField({ file: row, rank: 1 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 1 })?.GetPiece()?.color == piece.color && Field.GetField({ file: row, rank: 1 })?.GetPiece()?.type == PieceType.ROOK && !Field.GetField({ file: row, rank: 1 })?.GetPiece()?.active && Field.GetField({ file: row, rank: 2 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 3 })?.IsFieldEmpty() && Field.GetField({ file: row, rank: 4 })?.IsFieldEmpty() && isMoveInValids({ file: row, rank: 4 }, valids);
@@ -114,28 +129,32 @@ export default class Rules {
     return valids;
   }
 
+  /**
+   * @param piece The piece that we want to validate
+   * @param newLocation Where the piece want to move
+   * @returns If the move is possible without the being in check
+   */
   private static IsMoveValid(piece: Piece, newLocation: Position): boolean {
-    const oldPiece = Field.GetField(newLocation)!.GetPiece();
+    const oldPiece = Field.GetField(newLocation)!.GetPiece(); // Save the piece from the field where we want to simulate
 
     let result = true;
+    // Make the move
     Field.GetField(piece.location)?.SetPiece(null);
     Field.GetField(newLocation)?.SetPiece(piece);
 
-    const oppositePieces = getSidePieces(getOppositeSide(piece.color));
+    // Check if the king would still be in danger after the move
+    this.IsInCheck(piece.color);
 
-    for (let oPiece of oppositePieces) {
-      const moves = this.GetValidMovesForPiece(oPiece, false, true);
-      if (isMoveInValids(findKingLocation(piece.color)!, moves)) {
-        result = false;
-        break;
-      }
-    }
-
+    // Undo the move
     Field.GetField(piece.location)?.SetPiece(piece);
     Field.GetField(newLocation)?.SetPiece(oldPiece);
     return result;
   }
 
+  /**
+   * @param side The side that's king we want to inspect
+   * @returns If the king is in check
+   */
   private static IsInCheck(side: PieceColor): boolean {
     const oppositePieces = getSidePieces(getOppositeSide(side));
     for (let oPiece of oppositePieces) {

@@ -1,30 +1,34 @@
-import { GetConfig, SetConfig } from "./logic/config";
-import { makeElement } from "./logic/util";
+import { GetConfig, ResetConfig, SetConfig } from "./logic/config";
 import Chessboard from "./Components/Chessboard";
-import Gamebar from "./Components/Gamebar";
-import "./chessboard.css";
-import Field from "./Components/Field";
 import { PieceColor } from "./logic/constants";
+import { createElement } from "./logic/util";
+import Gamebar from "./Components/Gamebar";
+import Field from "./Components/Field";
+import "./chessboard.css";
 
 export default class Chess {
   private _boardContainerDOM: HTMLElement;
 
   constructor(gameDOM: HTMLElement, config?: ChessGameConfig) {
+    // Configure the settings
+    ResetConfig();
     SetConfig(config);
-    gameDOM.className = "g-game";
+
+    gameDOM.className = "g-game"; // assign custom class to the root div
+    // set the tile colors
     document.documentElement.style.setProperty("--dark-tile-color", GetConfig().darkTileColor!);
     document.documentElement.style.setProperty("--light-tile-color", GetConfig().lightTileColor!);
 
-    Field.DestroyFields();
+    Field.DestroyFields(); // Delete old fields from last game
 
-    // board
-    this._boardContainerDOM = makeElement("div", "g-board-container");
-    this._boardContainerDOM.style.width = `${gameDOM.offsetHeight}px`;
+    // Create a container for the board and then make the board
+    this._boardContainerDOM = createElement("div", "g-board-container");
+    this._boardContainerDOM.style.width = `${gameDOM.offsetHeight}px`; // TODO: Resize bug (README.md)
     this._boardContainerDOM.style.height = `${gameDOM.offsetHeight}px`;
     gameDOM.append(this._boardContainerDOM);
     new Chessboard(this._boardContainerDOM);
 
-    // game bar
+    // Create the sidebar then display the player names from config
     new Gamebar(gameDOM);
     Gamebar.SetActiveSide(GetConfig().startingSide!);
     Gamebar.SetPlayerName(PieceColor.WHITE, GetConfig().lightPlayerName!);
