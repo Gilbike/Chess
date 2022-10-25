@@ -3,7 +3,6 @@ import { BOARD_SIZE } from "../logic/constants";
 import Field from "./Field";
 import Piece from "./Piece";
 import Notation from "../logic/notation";
-import Rules from "../logic/rules";
 import { GetConfig } from "../logic/config";
 
 export default class Chessboard {
@@ -25,7 +24,6 @@ export default class Chessboard {
       Field.GetField({ file: piece.location.file, rank: piece.location.rank })?.SetPiece(nPiece);
     }
 
-    // TODO: Fix resize bug
     window.onresize = () => {
       for (let f = BOARD_SIZE; f > 0; f--) for (let r = 1; r <= BOARD_SIZE; r++) Field.GetField({ file: f, rank: r })?.GetPiece()?.UpdatePiecePosition();
     };
