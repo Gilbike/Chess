@@ -34,6 +34,17 @@ export default class Piece {
       this.WhileDrag(e);
     };
 
+    //mobile
+    this._dom.ontouchstart = (e) => {
+      this.StartDrag(e);
+    };
+    this._dom.ontouchend = (e) => {
+      this.StopDrag(e);
+    };
+    this._dom.ontouchmove = (e) => {
+      this.WhileDrag(e);
+    };
+
     board.append(this._dom);
   }
 
@@ -71,7 +82,9 @@ export default class Piece {
   }
 
   /* DRAG */
-  private StartDrag(e: MouseEvent) {
+  private touchX = 0;
+  private touchY = 0;
+  private StartDrag(e: MouseEvent | TouchEvent) {
     e.preventDefault();
     this._moving = true;
     this._dom.style.cursor = "grabbing";
@@ -81,15 +94,19 @@ export default class Piece {
     Field.MassHighlightField(this._possibleMoves);
   }
 
-  private StopDrag(e: MouseEvent) {
+  private StopDrag(e: MouseEvent | TouchEvent) {
     e.preventDefault();
     this._moving = false;
     this._dom.style.cursor = "";
     this._dom.style.zIndex = "";
+    const eX = e.type == "mouseup" ? (e as MouseEvent).x : this.touchX;
+    const eY = e.type == "mouseup" ? (e as MouseEvent).y : this.touchY;
+
+    console.log(eX);
 
     let boardLocation = this._board.getBoundingClientRect();
-    const newRank = Math.floor((e.x - boardLocation.left) / (this._board.offsetWidth / 8)) + 1,
-      newFile = 8 - Math.floor((e.y - boardLocation.top) / (this._board.offsetHeight / 8));
+    const newRank = Math.floor((eX - boardLocation.left) / (this._board.offsetWidth / 8)) + 1,
+      newFile = 8 - Math.floor((eY - boardLocation.top) / (this._board.offsetHeight / 8));
 
     const newLocation: Position = { file: newFile, rank: newRank };
 
@@ -124,12 +141,20 @@ export default class Piece {
     this.UpdatePiecePosition(); // update dom position
   }
 
-  private WhileDrag(e: MouseEvent) {
+  private WhileDrag(e: MouseEvent | TouchEvent) {
     e.preventDefault();
     if (!this._moving) return;
+    const eX = e.type == "mousemove" ? (e as MouseEvent).x : (e as TouchEvent).touches[0].clientX;
+    const eY = e.type == "mousemove" ? (e as MouseEvent).y : (e as TouchEvent).touches[0].clientY;
+    if (e.type == "touchmove") {
+      console.log("benne");
+
+      this.touchX = eX;
+      this.touchY = eY;
+    }
     let boardLocation = this._board.getBoundingClientRect();
-    const xOffset = e.x - this._dom.offsetWidth / 2 - boardLocation.left,
-      yOffset = e.y - this._dom.offsetWidth / 2 - boardLocation.top;
+    const xOffset = eX - this._dom.offsetWidth / 2 - boardLocation.left,
+      yOffset = eY - this._dom.offsetWidth / 2 - boardLocation.top;
     this._dom.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
   }
 
