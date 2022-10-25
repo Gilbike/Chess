@@ -327,6 +327,21 @@ a:visited {
     width: 30px;
     height: 30px;
   }
+  .g-modal {
+    width: 80%;
+  }
+  .g-newgame-setting {
+    flex-direction: column;
+    height: fit-content;
+    text-align: center;
+  }
+  .g-newgame-setting > * {
+    margin: auto;
+    width: 85%;
+  }
+  #g-start-newgame {
+    margin-top: 10px;
+  }
 }
 
 @media only screen and (max-width: 600px) {
