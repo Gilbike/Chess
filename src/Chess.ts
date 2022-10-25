@@ -1,10 +1,11 @@
 import { GetConfig, ResetConfig, SetConfig } from "./logic/config";
 import Chessboard from "./Components/Chessboard";
 import { PieceColor } from "./logic/constants";
-import { createElement } from "./logic/util";
+import { createElement, getOppositeSide } from "./logic/util";
 import Gamebar from "./Components/Gamebar";
 import Field from "./Components/Field";
 import "./chessboard.css";
+import Rules from "./logic/rules";
 
 export default class Chess {
   private _boardContainerDOM: HTMLElement;
@@ -33,5 +34,13 @@ export default class Chess {
     Gamebar.SetActiveSide(GetConfig().startingSide!);
     Gamebar.SetPlayerName(PieceColor.WHITE, GetConfig().lightPlayerName!);
     Gamebar.SetPlayerName(PieceColor.BLACK, GetConfig().darkPlayerName!);
+
+    // See if the game has to end because of checkmate or stalemate (used for custom FEN)
+    Rules.WhosTurn = getOppositeSide(GetConfig().startingSide!);
+    Rules.CheckEndGame();
+    Rules.WhosTurn = GetConfig().startingSide!;
+    Rules.CheckEndGame();
+
+    Rules.WhosTurn = GetConfig().startingSide!;
   }
 }

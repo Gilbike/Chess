@@ -8,10 +8,21 @@ import Piece from "../Components/Piece";
 export default class Rules {
   static WhosTurn: PieceColor;
 
+  //#region PUBLIC_METHODS
   static NextTurn(): void {
     this.WhosTurn = getOppositeSide(this.WhosTurn); // Switch the turning side
 
     // Count all moves that can be played
+    this.CheckEndGame();
+
+    Gamebar.SetActiveSide(this.WhosTurn); // Switch the active side displaying
+  }
+
+  /**
+   * Checks and if neccesary it ends the game with stalemate or checkmate
+   * @param side The side we want to check
+   */
+  static CheckEndGame(): void {
     let possibleMoves = 0;
     for (let piece of getSidePieces(this.WhosTurn)) {
       possibleMoves += this.GetValidMovesForPiece(piece, true, false).length;
@@ -27,10 +38,7 @@ export default class Rules {
       }
       modal.ShowModal();
       modal.Bind();
-      return;
     }
-
-    Gamebar.SetActiveSide(this.WhosTurn); // Switch the active side displaying
   }
 
   /**
@@ -150,6 +158,7 @@ export default class Rules {
     Field.GetField(newLocation)?.SetPiece(oldPiece);
     return result;
   }
+  //#endregion
 
   /**
    * @param side The side that's king we want to inspect

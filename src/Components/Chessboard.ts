@@ -25,8 +25,6 @@ export default class Chessboard {
       Field.GetField({ file: piece.location.file, rank: piece.location.rank })?.SetPiece(nPiece);
     }
 
-    Rules.WhosTurn = GetConfig().startingSide!;
-
     // TODO: Fix resize bug
     window.onresize = () => {
       for (let f = BOARD_SIZE; f > 0; f--) for (let r = 1; r <= BOARD_SIZE; r++) Field.GetField({ file: f, rank: r })?.GetPiece()?.UpdatePiecePosition();
