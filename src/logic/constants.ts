@@ -1,4 +1,5 @@
 export const BOARD_SIZE = 8;
+export const RANK_NAMES = ["a", "b", "c", "d", "e", "f", "g", "h"];
 export enum PieceType {
   PAWN = "p",
   KNIGHT = "n",

@@ -11,7 +11,7 @@
 
 - [x] Választható paraszt promóció
 - [x] En Passant
-- [ ] Tábla mutatja, a mezők koordinátáját
+- [x] Tábla mutatja, a mezők koordinátáját
 - [ ] Standard jelölések (AN)
 - [ ] Stamdard jelölések (AN) PGN fájlba mentése
 - [ ] Cserélhető bábú kinézet (mentéssel)

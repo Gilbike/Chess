@@ -179,9 +179,9 @@ export default class Piece {
       }
       if (this._possibleMoves[getMoveIndex(newLocation, this._possibleMoves)].moveType == HightlightType.Passant) {
         const fileDirection = this.color == PieceColor.BLACK ? 1 : -1; // Reverse the direction if the piece is BLACK
-        Field.GetField({ file: newLocation.file.valueOf() + fileDirection, rank: newLocation.rank })
-          ?.GetPiece()
-          ?.GetCaptured();
+        const knockedPiece = Field.GetField({ file: newLocation.file.valueOf() + fileDirection, rank: newLocation.rank })?.GetPiece();
+        Gamebar.AddKnockedPiece(getOppositeSide(this._color), knockedPiece!.type);
+        knockedPiece!.GetCaptured();
       }
 
       Rules.NextTurn(); // Call next turn

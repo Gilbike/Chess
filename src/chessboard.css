@@ -48,10 +48,12 @@ g-dark-tile {
 
 g-light-tile {
   background-color: var(--light-tile-color);
+  color: var(--dark-tile-color);
 }
 
 g-dark-tile {
   background-color: var(--dark-tile-color);
+  color: var(--light-tile-color);
 }
 
 g-piece {
@@ -271,6 +273,19 @@ g-piece {
 }
 .button:hover {
   background-color: #66bb6a;
+}
+
+.small-button {
+  box-sizing: border-box;
+  margin: auto;
+  text-align: center;
+  cursor: pointer;
+  color: var(--origin-color);
+  width: fit-content;
+  border-bottom: 1px dashed var(--origin-color);
+}
+.small-button:hover {
+  border-bottom-style: solid;
 }
 
 @keyframes g-modal-in {

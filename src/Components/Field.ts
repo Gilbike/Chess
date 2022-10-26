@@ -1,4 +1,4 @@
-import { HightlightType } from "../logic/constants";
+import { HightlightType, RANK_NAMES } from "../logic/constants";
 import Piece from "./Piece";
 import { createElement } from "../logic/util";
 
@@ -10,6 +10,7 @@ export default class Field {
 
   constructor(board: HTMLElement, location: Position, isLight: boolean) {
     this.dom = createElement(isLight ? "g-light-tile" : "g-dark-tile");
+    this.dom.innerText = `${location.file == 1 ? RANK_NAMES[location.rank.valueOf() - 1] : ""}${location.rank == 1 ? location.file : ""}`;
     this.location = location;
     board.append(this.dom);
     Field.fields.push(this);
