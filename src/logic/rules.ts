@@ -25,6 +25,7 @@ export default class Rules {
   static CheckEndGame(): void {
     let possibleMoves = 0;
     for (let piece of getSidePieces(this.WhosTurn)) {
+      piece.RemovePassantable();
       possibleMoves += this.GetValidMovesForPiece(piece, true, false).length;
     }
     if (possibleMoves == 0) {
@@ -129,6 +130,27 @@ export default class Rules {
         const move: ValidMove = {
           location: { file: row, rank: 3 },
           moveType: HightlightType.Castling,
+        };
+        valids.push(move);
+      }
+    }
+    // Special moves for the pawn (En Passant)
+    // TODO: Custom passantable figures (for custom game modes)
+    if (piece.type == PieceType.PAWN && checkForCheck) {
+      const fileDirection = piece.color == PieceColor.BLACK ? -1 : 1; // Reverse the direction if the piece is black
+      const leftPiece = Field.GetField({ file: piece.location.file, rank: piece.location.rank.valueOf() - 1 })?.GetPiece();
+      const rightPiece = Field.GetField({ file: piece.location.file, rank: piece.location.rank.valueOf() + 1 })?.GetPiece();
+      if (leftPiece && leftPiece.passantable && leftPiece?.type == PieceType.PAWN) {
+        const move: ValidMove = {
+          location: { file: piece.location.file.valueOf() + fileDirection, rank: piece.location.rank.valueOf() - 1 },
+          moveType: HightlightType.Passant,
+        };
+        valids.push(move);
+      }
+      if (rightPiece && rightPiece.passantable && rightPiece?.type == PieceType.PAWN) {
+        const move: ValidMove = {
+          location: { file: piece.location.file.valueOf() + fileDirection, rank: piece.location.rank.valueOf() + 1 },
+          moveType: HightlightType.Passant,
         };
         valids.push(move);
       }

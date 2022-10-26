@@ -18,6 +18,7 @@ export enum HightlightType {
   Check,
   Origin,
   Castling,
+  Passant,
 }
 export const PIECE_BEHAVIOUR: {
   [key in PieceType]: PieceBehaiourData;

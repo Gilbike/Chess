@@ -14,6 +14,7 @@ export default class Piece {
   private _moving: boolean = false;
   private _possibleMoves: ValidMove[] = [];
   private _active: boolean = false;
+  private _passantable: boolean = false;
 
   constructor(board: HTMLElement, location: Position, color: PieceColor, type: PieceType) {
     this._board = board;
@@ -61,8 +62,12 @@ export default class Piece {
   /**
    * Activate the piece (it made its first move)
    */
-  Activate() {
+  Activate(): void {
     this._active = true;
+  }
+
+  RemovePassantable(): void {
+    this._passantable = false;
   }
 
   /**
@@ -108,6 +113,9 @@ export default class Piece {
   public get active() {
     return this._active;
   }
+  public get passantable() {
+    return this._passantable;
+  }
   //#endregion
 
   //#region PIECE_MOVEMENT
@@ -140,6 +148,12 @@ export default class Piece {
     Field.GetField(this.location)?.SetHightlight(HightlightType.None);
 
     if (isMoveInValids(newLocation, this._possibleMoves)) {
+      if (!this.active && !this.passantable && this.location.file.valueOf() - newLocation.file.valueOf() == 2 /* Only enables passinting if it moved 2 fields vertically */) {
+        this._passantable = true;
+      } else if (this.active && this.passantable) {
+        this._passantable = false;
+      }
+      console.log(this.passantable);
       this.MovePiece(newLocation); // Move piece to its new location
       // Castling
       if (this.type == PieceType.KING && this._possibleMoves[getMoveIndex(newLocation, this._possibleMoves)].moveType == HightlightType.Castling && this._location.file == (this.color == PieceColor.WHITE ? 1 : 8)) {
@@ -162,6 +176,12 @@ export default class Piece {
             this._dom.className = this._dom.className.replace("p", type);
           });
         }
+      }
+      if (this._possibleMoves[getMoveIndex(newLocation, this._possibleMoves)].moveType == HightlightType.Passant) {
+        const fileDirection = this.color == PieceColor.BLACK ? 1 : -1; // Reverse the direction if the piece is BLACK
+        Field.GetField({ file: newLocation.file.valueOf() + fileDirection, rank: newLocation.rank })
+          ?.GetPiece()
+          ?.GetCaptured();
       }
 
       Rules.NextTurn(); // Call next turn

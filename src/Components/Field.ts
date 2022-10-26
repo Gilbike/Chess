@@ -37,6 +37,9 @@ export default class Field {
       case HightlightType.Capture:
         this.dom.className = "highlighted capturable";
         break;
+      case HightlightType.Passant:
+        this.dom.className = "highlighted capturable";
+        break;
       case HightlightType.Check:
         this.dom.className = "highlighted incheck";
         break;

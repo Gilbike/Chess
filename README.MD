@@ -10,4 +10,9 @@
 # FEATUREK AMIK KELLENEK
 
 - [x] Választható paraszt promóció
-- [ ] En Passant
+- [x] En Passant
+- [ ] Tábla mutatja, a mezők koordinátáját
+- [ ] Standard jelölések (AN)
+- [ ] Stamdard jelölések (AN) PGN fájlba mentése
+- [ ] Cserélhető bábú kinézet (mentéssel)
+- [ ] Flexibilisebb kód és több configuráció lehetőség az egyedi játékmódokhoz
