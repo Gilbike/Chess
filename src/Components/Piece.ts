@@ -153,12 +153,10 @@ export default class Piece {
       } else if (this.active && this.passantable) {
         this._passantable = false;
       }
-      console.log(this.passantable);
-      this.MovePiece(newLocation); // Move piece to its new location
       // Castling
       if (this.type == PieceType.KING && this._possibleMoves[getMoveIndex(newLocation, this._possibleMoves)].moveType == HightlightType.Castling && this._location.file == (this.color == PieceColor.WHITE ? 1 : 8)) {
         const row = this.color == PieceColor.WHITE ? 1 : 8;
-        const kingSide = this._location.rank == 7;
+        const kingSide = newLocation.rank == 7;
         if (kingSide) {
           Field.GetField({ file: row, rank: 8 })?.GetPiece()?.MovePiece({ file: row, rank: 6 }); // Move the rook
         } else {
@@ -184,6 +182,7 @@ export default class Piece {
         knockedPiece!.GetCaptured();
       }
 
+      this.MovePiece(newLocation); // Move piece to its new location
       Rules.NextTurn(); // Call next turn
     }
 

@@ -24,7 +24,6 @@ export default class Chess {
 
     // Create a container for the board and then make the board
     this._boardContainerDOM = createElement("div", "g-board-container");
-    console.log(gameDOM.style.height);
     this._boardContainerDOM.style.width = gameDOM.style.height;
     this._boardContainerDOM.style.height = gameDOM.style.height;
     gameDOM.append(this._boardContainerDOM);

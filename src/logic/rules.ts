@@ -180,13 +180,12 @@ export default class Rules {
     Field.GetField(newLocation)?.SetPiece(oldPiece);
     return result;
   }
-  //#endregion
 
   /**
    * @param side The side that's king we want to inspect
    * @returns If the king is in check
    */
-  private static IsInCheck(side: PieceColor): boolean {
+  static IsInCheck(side: PieceColor): boolean {
     const oppositePieces = getSidePieces(getOppositeSide(side));
     for (let oPiece of oppositePieces) {
       const moves = this.GetValidMovesForPiece(oPiece, false, true);
@@ -196,4 +195,5 @@ export default class Rules {
     }
     return false;
   }
+  //#endregion
 }
