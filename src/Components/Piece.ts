@@ -148,7 +148,7 @@ export default class Piece {
     Field.GetField(this.location)?.SetHightlight(HightlightType.None);
 
     if (isMoveInValids(newLocation, this._possibleMoves)) {
-      if (!this.active && !this.passantable && this.location.file.valueOf() - newLocation.file.valueOf() == 2 /* Only enables passinting if it moved 2 fields vertically */) {
+      if (!this.active && !this.passantable && Math.abs(this.location.file.valueOf() - newLocation.file.valueOf()) == 2 /* Only enables passinting if it moved 2 fields vertically */) {
         this._passantable = true;
       } else if (this.active && this.passantable) {
         this._passantable = false;
