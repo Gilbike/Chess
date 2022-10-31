@@ -22,7 +22,7 @@ export default class PromotionModal extends Modal {
     `;
   }
 
-  Bind(onSelected: (type: PieceType) => void): void {
+  override Bind(onSelected: (type: PieceType) => void): void {
     // User selected queen
     document.getElementById("g-promotion-q")!.onclick = () => {
       super.DestroyModal();

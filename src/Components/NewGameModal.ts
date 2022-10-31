@@ -39,7 +39,7 @@ export default class NewGameModal extends Modal {
     `;
   }
 
-  Bind(): void {
+  override Bind(): void {
     document.getElementById("g-start-newgame")!.onclick = this.StartGame;
   }
 

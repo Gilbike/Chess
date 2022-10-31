@@ -19,7 +19,7 @@ export default class EndModal extends Modal {
     `;
   }
 
-  Bind(): void {
+  override Bind(): void {
     document.getElementById("g-end-button")!.onclick = this.OnNewGameClick;
   }
 

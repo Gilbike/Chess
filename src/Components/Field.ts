@@ -1,6 +1,7 @@
 import { HightlightType, RANK_NAMES } from "../logic/constants";
 import Piece from "./Piece";
 import { createElement } from "../logic/util";
+import { FieldDisplayMode } from "../logic/config";
 
 export default class Field {
   private dom: HTMLElement;
@@ -52,6 +53,20 @@ export default class Field {
         break;
       default:
         this.dom.removeAttribute("class");
+        break;
+    }
+  }
+
+  SetDisplayMode(mode: FieldDisplayMode): void {
+    switch (mode) {
+      case FieldDisplayMode.ColumnsAndRows:
+        this.dom.innerText = `${this.location.file == 1 ? RANK_NAMES[this.location.rank.valueOf() - 1] : ""}${this.location.rank == 1 ? this.location.file : ""}`;
+        break;
+      case FieldDisplayMode.Every:
+        this.dom.innerText = `${RANK_NAMES[this.location.rank.valueOf() - 1]}${this.location.file}`;
+        break;
+      default:
+        this.dom.innerText = ``;
         break;
     }
   }

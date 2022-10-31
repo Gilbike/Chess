@@ -9,6 +9,12 @@ const defaultConfig: ChessGameConfig = {
   darkTileColor: "#a1887f",
 };
 
+export enum FieldDisplayMode {
+  None,
+  ColumnsAndRows,
+  Every,
+}
+
 let GameConfig: ChessGameConfig = defaultConfig;
 
 /**

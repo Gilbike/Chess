@@ -3,7 +3,7 @@ import { BOARD_SIZE } from "../logic/constants";
 import Field from "./Field";
 import Piece from "./Piece";
 import Notation from "../logic/notation";
-import { GetConfig } from "../logic/config";
+import { FieldDisplayMode, GetConfig } from "../logic/config";
 
 export default class Chessboard {
   private boardElement: HTMLElement;
@@ -27,5 +27,9 @@ export default class Chessboard {
     window.onresize = () => {
       for (let f = BOARD_SIZE; f > 0; f--) for (let r = 1; r <= BOARD_SIZE; r++) Field.GetField({ file: f, rank: r })?.GetPiece()?.UpdatePiecePosition();
     };
+  }
+
+  static SetFieldDisplayMode(mode: FieldDisplayMode): void {
+    for (let f = BOARD_SIZE; f > 0; f--) for (let r = 1; r <= BOARD_SIZE; r++) Field.GetField({ file: f, rank: r })?.SetDisplayMode(mode);
   }
 }
