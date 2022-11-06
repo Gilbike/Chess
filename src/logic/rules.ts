@@ -4,7 +4,6 @@ import EndModal from "../Components/EndModal";
 import Gamebar from "../Components/Gamebar";
 import Field from "../Components/Field";
 import Piece from "../Components/Piece";
-import Chessboard from "../Components/Chessboard";
 
 export default class Rules {
   static WhosTurn: PieceColor;

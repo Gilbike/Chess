@@ -171,7 +171,7 @@ export default class Piece {
       // Pawn promotion
       else if (this.type == PieceType.PAWN) {
         const row = this.color == PieceColor.WHITE ? 8 : 1;
-        if (this.location.file == row) {
+        if (newLocation.file == row) {
           const modal = new PromotionModal();
           modal.ShowModal();
           modal.Bind((type: PieceType) => {

@@ -27,5 +27,5 @@ export default class Modal {
     document.getElementsByTagName("g-modal")[0].remove();
   }
 
-  Bind(...args: any[]) {}
+  Bind(..._args: any[]) {}
 }
