@@ -79,6 +79,11 @@ export default class Piece {
     this._dom.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
   }
 
+  SetPiecePosition(location: Position): void {
+    this._location = location;
+    this.UpdatePiecePosition();
+  }
+
   /**
    * Move the piece to a location
    * @param location The new position for the piece

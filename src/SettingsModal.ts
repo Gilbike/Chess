@@ -14,6 +14,12 @@ export default class SettingsModal extends Modal {
           <option selected value="colandrow">Csak sorok és oszlopok elején</option>
           <option value="every">Minden mezőn</option>
         </select>
+        <span>Alul lévő oldal:</span>
+        <select id="settings-field-display">
+          <option value="light">Világos</option>
+          <option value="dark">Sötét</option>
+          <option selected value="auto">Automatikus</option>
+        </select>
       </div>
     </div>
     `;

@@ -42,5 +42,7 @@ export default class Chess {
     Rules.CheckEndGame();
 
     Rules.WhosTurn = GetConfig().startingSide!;
+
+    // Chessboard.Instance.FlipBoardToSide(PieceColor.BLACK);
   }
 }

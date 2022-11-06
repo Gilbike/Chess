@@ -3,8 +3,8 @@ import { PieceColor } from "./constants";
 const defaultConfig: ChessGameConfig = {
   startingFen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
   startingSide: PieceColor.WHITE,
-  lightPlayerName: "Player1",
-  darkPlayerName: "Player2",
+  lightPlayerName: "Light",
+  darkPlayerName: "Dark",
   lightTileColor: "#e0e0e0",
   darkTileColor: "#a1887f",
 };

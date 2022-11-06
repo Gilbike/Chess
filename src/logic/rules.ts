@@ -4,6 +4,7 @@ import EndModal from "../Components/EndModal";
 import Gamebar from "../Components/Gamebar";
 import Field from "../Components/Field";
 import Piece from "../Components/Piece";
+import Chessboard from "../Components/Chessboard";
 
 export default class Rules {
   static WhosTurn: PieceColor;
@@ -16,6 +17,7 @@ export default class Rules {
     this.CheckEndGame();
 
     Gamebar.SetActiveSide(this.WhosTurn); // Switch the active side displaying
+    // Chessboard.Instance.FlipBoardToSide(this.WhosTurn); // Change the view of the board
   }
 
   /**

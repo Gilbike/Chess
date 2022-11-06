@@ -9,8 +9,8 @@ export default class Field {
   private piece: Piece | null = null;
   private highlight: HightlightType = HightlightType.None;
 
-  constructor(board: HTMLElement, location: Position, isLight: boolean) {
-    this.dom = createElement(isLight ? "g-light-tile" : "g-dark-tile");
+  constructor(board: HTMLElement, location: Position) {
+    this.dom = createElement(location.rank.valueOf() % 2 == (location.file.valueOf() % 2 == 0 ? 1 : 0) ? "g-light-tile" : "g-dark-tile");
     this.dom.innerText = `${location.file == 1 ? RANK_NAMES[location.rank.valueOf() - 1] : ""}${location.rank == 1 ? location.file : ""}`;
     this.location = location;
     board.append(this.dom);
@@ -69,6 +69,12 @@ export default class Field {
         this.dom.innerText = ``;
         break;
     }
+  }
+
+  UpdateFieldPosition(location: Position) {
+    this.location = location;
+    this.SetDisplayMode(FieldDisplayMode.Every);
+    this.GetPiece()?.SetPiecePosition(this.location);
   }
   //#endregion
 
